@@ -103,8 +103,6 @@ if train_now:
 
   with st.spinner("Training model..."):
     clf, metrics, feature_order = train_model(df)
-
-
 colA, colB = st.columns([1,1])
 
 with colA:
