@@ -63,7 +63,7 @@ metrics = {"accuracy" : float(accuracy_score(y_test, y_pred)),
             "confusion_matrix" : str(confusion_matrix(y_test, y_pred).tolist())}
 
 feature_order = X.columns.tolist()
-return clf, metrics, feature_order
+  return clf, metrics, feature_order
 
 st.set_page_config(page_title="Loan Approval Prediction", page_icon=":money_with_wings:", layout="wide")
 st.title("Loan Approval Prediction")
