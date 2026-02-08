@@ -177,7 +177,6 @@ if st.button("Predict Loan Approval"):
     model = st.session_state["model"]
     feature_order = st.session_state["feature_order"]
 
-    input_df = pd.DataFrame([input_row])
 
     # Align columns exactly as training
     input_df = input_df.reindex(columns=feature_order, fill_value=0)
