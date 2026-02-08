@@ -26,9 +26,9 @@ def train_model(df: pd.DataFrame):
     X = df.drop(columns=drop_cols)
     y = df[target]
 
-    cat_cols = [c for c in ["gender", "city", "employement_type", "bank"] if c in X.columns]
-    num_cols = [c for c in X.columns if c not in cat_cols]
-
+    cat_cols = X.select_dtypes(include=["object", "category"]).columns.tolist()
+    num_cols = X.select_dtypes(include=["int64", "float64"]).columns.tolist()
+    
     numeric_transformer = Pipeline(steps=[
         ("imputer", SimpleImputer(strategy="median")),
         ("scaler", StandardScaler())
