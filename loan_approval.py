@@ -144,7 +144,7 @@ if clf is not None and metrics is not None:
       loan_tenure_months = st.selectbox("Tenure (months)", [6, 12, 18, 24, 36, 48, 60])
       existing_loans = st.selectbox("Existing Loans", [0, 1, 2, 3], index=0)
       default_history = st.selectbox("Default History", [0, 1, 2], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
-      has_credit_history = st.selectbox("Credit Card History", [0, 1], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
+      has_credit_card = st.selectbox("Credit Card History", [0, 1], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
 
 
   input_row = pd.DataFrame([{
