@@ -167,23 +167,23 @@ if "model" in st.session_state:
     }])
   #input_row = input_row[feature_order]
 
-  if st.button("Predict Loan Approval"):
-    if "model" not in st.session_state:
-        st.warning("Please train the model first.")
-        st.stop()
-    else:
-      model = st.session_state["model"]
-      feature_order = st.session_state["feature_order"]
+if st.button("Predict Loan Approval"):
+  if "model" not in st.session_state:
+      st.warning("Please train the model first.")
+      st.stop()
+  else:
+    model = st.session_state["model"]
+    feature_order = st.session_state["feature_order"]
 
-      input_df = pd.DataFrame([input_row])
+    input_df = pd.DataFrame([input_row])
 
     # Align columns exactly as training
-      input_df = input_df.reindex(columns=feature_order, fill_value=0)
+    input_df = input_df.reindex(columns=feature_order, fill_value=0)
 
-      prob = float(model.predict_proba(input_df)[:, 1][0])
-      pred = int(prob >= 0.5)
+    prob = float(model.predict_proba(input_df)[:, 1][0])
+    pred = int(prob >= 0.5)
 
-      if pred == 1:
-          st.success(f"{applicant_name} : APPROVED (Probability: {prob:.2%})")
-      else:
-          st.error(f"{applicant_name} : DENIED (Probability: {prob:.2%})")
+    if pred == 1:
+        st.success(f"{applicant_name} : APPROVED (Probability: {prob:.2%})")
+    else:
+        st.error(f"{applicant_name} : DENIED (Probability: {prob:.2%})")
