@@ -99,10 +99,11 @@ st. sidebar.header("II. Train Model")
 train_now = st.sidebar.button("Train Model")
 
 if train_now:
-  st.cache_resource.clear()
-
-  with st.spinner("Training model..."):
-    clf, metrics, feature_order = train_model(df)
+    with st.spinner("Training model..."):
+        clf, metrics, feature_order = train_model(df)
+        st.session_state["model"] = clf
+        st.session_state["metrics"] = metrics
+        st.session_state["feature_order"] = feature_order
 colA, colB = st.columns([1,1])
 
 with colA:
