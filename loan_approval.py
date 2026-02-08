@@ -178,8 +178,6 @@ if st.button("Predict Loan Approval"):
     feature_order = st.session_state["feature_order"]
 
 
-    # Align columns exactly as training
-    input_df = input_df.reindex(columns=feature_order, fill_value=0)
 
     prob = float(model.predict_proba(input_df)[:, 1][0])
     pred = int(prob >= 0.5)
