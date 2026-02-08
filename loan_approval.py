@@ -165,11 +165,10 @@ if clf is not None and metrics is not None:
   #input_row = input_row[feature_order]
 
   if st.button("Predict Loan Approval"):
-
     if "model" not in st.session_state:
         st.warning("Please train the model first.")
         st.stop()
-
+    else:
     model = st.session_state["model"]
     feature_order = st.session_state["feature_order"]
 
