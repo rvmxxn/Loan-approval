@@ -150,21 +150,21 @@ if clf is not None and metrics is not None:
 if "model" in st.session_state:
     model = st.session_state["model"]
   
-  input_row = pd.DataFrame([{
-      "gender" : gender,
-      "age" : age,
-      "city" : city,
-      "employment_type" : employement_type,
-      "bank" : bank,
-      "monthly_income_pkr" : monthly_income_pkr,
-      "credit_score" : credit_score,
-      "loan_amount_pkr" : loan_amount_pkr,
-      "loan_tenure_months" : loan_tenure_months,
-      "existing_loans" : existing_loans,
-      "default_history" : default_history,
-      "has_credit_card" : has_credit_card
+    input_row = pd.DataFrame([{
+        "gender" : gender,
+        "age" : age,
+        "city" : city,
+        "employment_type" : employement_type,
+        "bank" : bank,
+        "monthly_income_pkr" : monthly_income_pkr,
+        "credit_score" : credit_score,
+        "loan_amount_pkr" : loan_amount_pkr,
+        "loan_tenure_months" : loan_tenure_months,
+        "existing_loans" : existing_loans,
+        "default_history" : default_history,
+        "has_credit_card" : has_credit_card
 
-  }])
+    }])
   #input_row = input_row[feature_order]
 
   if st.button("Predict Loan Approval"):
