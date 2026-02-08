@@ -89,6 +89,11 @@ except Exception as e:
 
 st.sidebar.success(f"Loaded {len(df) :,} rows of data")
 
+clf = None
+metrics = None
+feature_order = None
+
+
 
 st. sidebar.header("II. Train Model")
 train_now = st.sidebar.button("Train Model")
@@ -106,64 +111,65 @@ with colA:
   st.subheader("Data Preview")
   st.dataframe(df.head(10), use_container_width=True)
 
-with colB:
-  st.subheader("Metrics (holdout test set)")
-  st.write(f"Accuracy: {metrics['accuracy']}")
-  st.write(f"Precision: {metrics['precision']}")
-  st.write(f"Recall: {metrics['recall']}")
-  st.write(f"F1 Score: {metrics['f1']}")
+if clf is not None and metrics is not None:
+  with colB:
+    st.subheader("Metrics (holdout test set)")
+    st.write(f"Accuracy: {metrics['accuracy']}")
+    st.write(f"Precision: {metrics['precision']}")
+    st.write(f"Recall: {metrics['recall']}")
+    st.write(f"F1 Score: {metrics['f1']}")
 
-  cm = np.array(eval(metrics["confusion_matrix"]))
-  st.write("Confusion Matrix (row: actual[0,1], cols: predicted[0,1])")
-  st.dataframe(pd.DataFrame(cm, columns=["Pred 0", "Pred 1"], index=["Actual 0", "Actual 1"]), use_container_width=True)
-  st.divider()
+    cm = np.array(eval(metrics["confusion_matrix"]))
+    st.write("Confusion Matrix (row: actual[0,1], cols: predicted[0,1])")
+    st.dataframe(pd.DataFrame(cm, columns=["Pred 0", "Pred 1"], index=["Actual 0", "Actual 1"]), use_container_width=True)
+    st.divider()
 
-  st.subheader("Run a Prediction")
-  c1, c2, c3, c4 = st.columns(4)
+    st.subheader("Run a Prediction")
+    c1, c2, c3, c4 = st.columns(4)
 
-  with c1:
-    applicant_name = st.text_input("Applicant Name", value="Muhammad Ali")
-    gender = st.selectbox("Gender", ["Male", "Female"], index=0)
-    age = st.slider("Age", 21, 60, 30)
+    with c1:
+      applicant_name = st.text_input("Applicant Name", value="Muhammad Ali")
+      gender = st.selectbox("Gender", ["Male", "Female"], index=0)
+      age = st.slider("Age", 21, 60, 30)
 
-  with c2:
-    city = st.selectbox("City", sorted(df["city"].unique().tolist()))
-    employement_type = st.selectbox("Employment Type", sorted(df["employement_type"].unique().tolist()))
-    bank = st.selectbox("Bank", sorted(df["bank"].unique().tolist()))
+    with c2:
+      city = st.selectbox("City", sorted(df["city"].unique().tolist()))
+      employement_type = st.selectbox("Employment Type", sorted(df["employement_type"].unique().tolist()))
+      bank = st.selectbox("Bank", sorted(df["bank"].unique().tolist()))
 
-  with c3:
-    monthly_income_pkr = st.number_input("Monthly Income (PKR)", min_value=10000, max_value=1000000, value=50000)
-    credit_score = st.slider("Credit Score", 300, 900, 600)
+    with c3:
+      monthly_income_pkr = st.number_input("Monthly Income (PKR)", min_value=10000, max_value=1000000, value=50000)
+      credit_score = st.slider("Credit Score", 300, 900, 600)
 
-  with c4:
-    loan_amount_pkr = st.number_input("Loan Amount (PKR)", min_value=50000, max_value=3500000, value=800000)
-    loan_duration_months = st.selectbox("Tenure (months)", [6, 12, 18, 24, 36, 48, 60])
-    existing_loans = st.selectbox("Existing Loans", [0, 1, 2, 3], index=0)
-    default_history = st.selectbox("Default History", [0, 1, 2], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
-    credit_history = st.selectbox("Credit Card History", [0, 1], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
+    with c4:
+      loan_amount_pkr = st.number_input("Loan Amount (PKR)", min_value=50000, max_value=3500000, value=800000)
+      loan_duration_months = st.selectbox("Tenure (months)", [6, 12, 18, 24, 36, 48, 60])
+      existing_loans = st.selectbox("Existing Loans", [0, 1, 2, 3], index=0)
+      default_history = st.selectbox("Default History", [0, 1, 2], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
+      credit_history = st.selectbox("Credit Card History", [0, 1], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
 
 
-input_row = pd.DataFrame([{
-    "gender" : gender,
-    "age" : age,
-    "city" : city,
-    "employement_type" : employement_type,
-    "bank" : bank,
-    "monthly_income_pkr" : monthly_income_pkr,
-    "credit_score" : credit_score,
-    "loan_amount_pkr" : loan_amount_pkr,
-    "loan_duration_months" : loan_duration_months,
-    "existing_loans" : existing_loans,
-    "default_history" : default_history,
-    "credit_history" : credit_history
+  input_row = pd.DataFrame([{
+      "gender" : gender,
+      "age" : age,
+      "city" : city,
+      "employement_type" : employement_type,
+      "bank" : bank,
+      "monthly_income_pkr" : monthly_income_pkr,
+      "credit_score" : credit_score,
+      "loan_amount_pkr" : loan_amount_pkr,
+      "loan_duration_months" : loan_duration_months,
+      "existing_loans" : existing_loans,
+      "default_history" : default_history,
+      "credit_history" : credit_history
 
-}])
-#input_row = input_row[feature_order]
+  }])
+  #input_row = input_row[feature_order]
 
-if st.button("Predict Loan Approval"):
-  prob = float(clf.predict_proba(input_row)[:,1][0])
-  pred = int (prob >= 0.5)
-  if pred == 1:
-    st.success(f"{applicant_name} : APPROVED (Probability: {prob:.2%})")
-  else:
-    st.error(f"{applicant_name} : DENIED (Probability: {prob:.2%}")
+  if st.button("Predict Loan Approval"):
+    prob = float(clf.predict_proba(input_row)[:,1][0])
+    pred = int (prob >= 0.5)
+    if pred == 1:
+      st.success(f"{applicant_name} : APPROVED (Probability: {prob:.2%})")
+    else:
+      st.error(f"{applicant_name} : DENIED (Probability: {prob:.2%}")
