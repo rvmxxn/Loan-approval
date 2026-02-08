@@ -132,7 +132,7 @@ if clf is not None and metrics is not None:
 
     with c2:
       city = st.selectbox("City", sorted(df["city"].unique().tolist()))
-      employement_type = st.selectbox("Employment Type", sorted(df["employement_type"].unique().tolist()))
+      employement_type = st.selectbox("Employment Type", sorted(df["employment_type"].unique().tolist()))
       bank = st.selectbox("Bank", sorted(df["bank"].unique().tolist()))
 
     with c3:
@@ -151,7 +151,7 @@ if clf is not None and metrics is not None:
       "gender" : gender,
       "age" : age,
       "city" : city,
-      "employement_type" : employement_type,
+      "employment_type" : employement_type,
       "bank" : bank,
       "monthly_income_pkr" : monthly_income_pkr,
       "credit_score" : credit_score,
