@@ -166,23 +166,16 @@ if clf is not None and metrics is not None:
     }])
   #input_row = input_row[feature_order]
 
-if "model" in st.session_state:
-    model = st.session_state["model"]
+if st.session_state.feature_order is not None:
+  input_row = input_row[st.session_state.feature_order]
 
-if st.button("Predict Loan Approval"):
-  if "model" not in st.session_state:
-      st.warning("Please train the model first.")
-      st.stop()
-  else:
-    model = st.session_state["model"]
-    feature_order = st.session_state["feature_order"]
-
-
-
-    prob = float(st.session_state["model"].predict_proba(input_row)[:, 1][0])
-    pred = int(prob >= 0.5)
-
+if st.button("Predict Loan Approva"):
+  if st.session_state.model is not None:
+    prob = float(st.session_state.model.predict_proba(input_row)[:,1][0])
+    pred = int (prob >= 0.5)
     if pred == 1:
-        st.success(f"{applicant_name} : APPROVED (Probability: {prob:.2%})")
+      st.success(f"{applicant_name} : APPROVED (Probability: {prob:.2%})")
     else:
-        st.error(f"{applicant_name} : DENIED (Probability: {prob:.2%})")
+      st.error(f"{applicant_name} : DENIED (Probability: {prob:.2%})")
+  else:
+    st.warning("Please train the model first by clicking 'Train Model' in the sidebar.")
