@@ -147,8 +147,7 @@ if clf is not None and metrics is not None:
       default_history = st.selectbox("Default History", [0, 1, 2], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
       has_credit_card = st.selectbox("Credit Card History", [0, 1], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
 
-if "model" in st.session_state:
-    model = st.session_state["model"]
+
   
     input_row = pd.DataFrame([{
         "gender" : gender,
@@ -166,6 +165,9 @@ if "model" in st.session_state:
 
     }])
   #input_row = input_row[feature_order]
+
+if "model" in st.session_state:
+    model = st.session_state["model"]
 
 if st.button("Predict Loan Approval"):
   if "model" not in st.session_state:
