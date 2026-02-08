@@ -141,10 +141,10 @@ if clf is not None and metrics is not None:
 
     with c4:
       loan_amount_pkr = st.number_input("Loan Amount (PKR)", min_value=50000, max_value=3500000, value=800000)
-      loan_duration_months = st.selectbox("Tenure (months)", [6, 12, 18, 24, 36, 48, 60])
+      loan_tenure_months = st.selectbox("Tenure (months)", [6, 12, 18, 24, 36, 48, 60])
       existing_loans = st.selectbox("Existing Loans", [0, 1, 2, 3], index=0)
       default_history = st.selectbox("Default History", [0, 1, 2], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
-      credit_history = st.selectbox("Credit Card History", [0, 1], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
+      has_credit_history = st.selectbox("Credit Card History", [0, 1], format_func=lambda x: "No ()" if x == 0 else "Yes (1)", index=0)
 
 
   input_row = pd.DataFrame([{
@@ -156,10 +156,10 @@ if clf is not None and metrics is not None:
       "monthly_income_pkr" : monthly_income_pkr,
       "credit_score" : credit_score,
       "loan_amount_pkr" : loan_amount_pkr,
-      "loan_duration_months" : loan_duration_months,
+      "loan_tenure_months" : loan_tenure_months,
       "existing_loans" : existing_loans,
       "default_history" : default_history,
-      "credit_history" : credit_history
+      "has_credit_card" : has_credit_card
 
   }])
   #input_row = input_row[feature_order]
