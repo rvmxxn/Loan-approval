@@ -28,10 +28,7 @@ def train_model(df: pd.DataFrame):
   cat_cols = [c for c in ["gender", "city", "employement_type", "bank"] if c in X.columns]
   num_cols = [c for c in X.columns if c not in cat_cols]
 
-   = Pipeline(steps=[
-      ("imputer", SimpleImputer(strategy="median")),
-      ("scaler", StandardScaler())
-  ])
+
 
 numeric_transformer = Pipeline(steps=[
     ("imputer", SimpleImputer(strategy="median")),
