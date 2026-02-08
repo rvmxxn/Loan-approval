@@ -117,7 +117,7 @@ if clf is not None and metrics is not None:
     st.write(f"Recall: {metrics['recall']}")
     st.write(f"F1 Score: {metrics['f1']}")
 
-    cm = np.array(eval(metrics["confusion_matrix"]))
+    cm = np.array(metrics["confusion_matrix"])
     st.write("Confusion Matrix (row: actual[0,1], cols: predicted[0,1])")
     st.dataframe(pd.DataFrame(cm, columns=["Pred 0", "Pred 1"], index=["Actual 0", "Actual 1"]), use_container_width=True)
     st.divider()
