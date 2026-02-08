@@ -179,7 +179,7 @@ if st.button("Predict Loan Approval"):
 
 
 
-    prob = float(model.predict_proba(input_df)[:, 1][0])
+    prob = float(st.session_state["model"].predict_proba(input_row)[:, 1][0])
     pred = int(prob >= 0.5)
 
     if pred == 1:
