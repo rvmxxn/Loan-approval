@@ -17,53 +17,61 @@ def load_data(csv_path: str) -> pd.DataFrame:
 
 @st.cache_resource
 def train_model(df: pd.DataFrame):
-  target = "approved"
-  drop_cols = [target]
-  if "applicant_name" in df.columns:
-    drop_cols.append("applicant_name")
+    target = "approved"
+    drop_cols = [target]
 
-  X = df.drop(columns=drop_cols)
-  y = df[target]
+    if "applicant_name" in df.columns:
+        drop_cols.append("applicant_name")
 
-  cat_cols = [c for c in ["gender", "city", "employement_type", "bank"] if c in X.columns]
-  num_cols = [c for c in X.columns if c not in cat_cols]
+    X = df.drop(columns=drop_cols)
+    y = df[target]
 
+    cat_cols = [c for c in ["gender", "city", "employement_type", "bank"] if c in X.columns]
+    num_cols = [c for c in X.columns if c not in cat_cols]
 
+    numeric_transformer = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy="median")),
+        ("scaler", StandardScaler())
+    ])
 
-numeric_transformer = Pipeline(steps=[
-    ("imputer", SimpleImputer(strategy="median")),
-    ("scaler", StandardScaler())
-])
+    categorical_transformer = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("onehot", OneHotEncoder(handle_unknown="ignore"))
+    ])
 
-categorical_transformer = Pipeline(steps=[
-    ("imputer", SimpleImputer(strategy="most_frequent")),
-    ("onehot", OneHotEncoder(handle_unknown="ignore"))
-])
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("num", numeric_transformer, num_cols),
+            ("cat", categorical_transformer, cat_cols)
+        ]
+    )
 
-preprocessor = ColumnTransformer(
-    transformers=[
-        ("num", numeric_transformer, num_cols),
-        ("cat", categorical_transformer, cat_cols)
-    ]
-)
+    model = LogisticRegression(max_iter=2000)
 
-model = LogisticRegression(max_iter=2000)
+    clf = Pipeline(steps=[
+        ("preprocess", preprocessor),
+        ("model", model)
+    ])
 
-clf = Pipeline(steps=[("preprocess", preprocessor), ("model", model)])
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
 
-clf.fit(X_train, y_train)
-y_pred = clf.predict(X_test)
+    metrics = {
+        "accuracy": float(accuracy_score(y_test, y_pred)),
+        "precision": float(precision_score(y_test, y_pred, zero_division=0)),
+        "recall": float(recall_score(y_test, y_pred, zero_division=0)),
+        "f1": float(f1_score(y_test, y_pred, zero_division=0)),
+        "confusion_matrix": confusion_matrix(y_test, y_pred).tolist()
+    }
 
-metrics = {"accuracy" : float(accuracy_score(y_test, y_pred)),
-            "precision" : float(precision_score(y_test, y_pred, zero_division=0)),
-            "recall" : float(recall_score(y_test, y_pred, zero_division=0)),
-            "f1" : float(f1_score(y_test, y_pred, zero_division=0)),
-            "confusion_matrix" : str(confusion_matrix(y_test, y_pred).tolist())}
+    feature_order = X.columns.tolist()
 
-feature_order = X.columns.tolist()
-  return clf, metrics, feature_order
+    return clf, metrics, feature_order
+
 
 st.set_page_config(page_title="Loan Approval Prediction", page_icon=":money_with_wings:", layout="wide")
 st.title("Loan Approval Prediction")
