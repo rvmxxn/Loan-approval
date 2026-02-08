@@ -47,14 +47,14 @@ preprocessor = ColumnTransformer(
     ]
 )
 
-  model = LogisticRegression(max_iter=2000)
+model = LogisticRegression(max_iter=2000)
 
-  clf = Pipeline(steps=[("preprocess", preprocessor), ("model", model)])
+clf = Pipeline(steps=[("preprocess", preprocessor), ("model", model)])
 
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-  clf.fit(X_train, y_train)
-  y_pred = clf.predict(X_test)
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
 
   metrics = {"accuracy" : float(accuracy_score(y_test, y_pred)),
              "precision" : float(precision_score(y_test, y_pred, zero_division=0)),
