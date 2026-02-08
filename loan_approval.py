@@ -127,7 +127,7 @@ if clf is not None and metrics is not None:
 
     with c1:
       applicant_name = st.text_input("Applicant Name", value="Muhammad Ali")
-      gender = st.selectbox("Gender", ["Male", "Female"], index=0)
+      gender = st.selectbox("Gender", ["M", "F"], index=0)
       age = st.slider("Age", 21, 60, 30)
 
     with c2:
