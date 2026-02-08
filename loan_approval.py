@@ -56,15 +56,15 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
-  metrics = {"accuracy" : float(accuracy_score(y_test, y_pred)),
-             "precision" : float(precision_score(y_test, y_pred, zero_division=0)),
-             "recall" : float(recall_score(y_test, y_pred, zero_division=0)),
-             "f1" : float(f1_score(y_test, y_pred, zero_division=0)),
-             "confusion_matrix" : str(confusion_matrix(y_test, y_pred).tolist())}
+metrics = {"accuracy" : float(accuracy_score(y_test, y_pred)),
+            "precision" : float(precision_score(y_test, y_pred, zero_division=0)),
+            "recall" : float(recall_score(y_test, y_pred, zero_division=0)),
+            "f1" : float(f1_score(y_test, y_pred, zero_division=0)),
+            "confusion_matrix" : str(confusion_matrix(y_test, y_pred).tolist())}
 
-  feature_order = X.columns.tolist()
+feature_order = X.columns.tolist()
 
-  return clf, metrics, feature_order
+return clf, metrics, feature_order
 
 st.set_page_config(page_title="Loan Approval Prediction", page_icon=":money_with_wings:", layout="wide")
 st.title("Loan Approval Prediction")
