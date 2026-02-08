@@ -180,7 +180,7 @@ if clf is not None and metrics is not None:
       prob = float(model.predict_proba(input_df)[:, 1][0])
       pred = int(prob >= 0.5)
 
-    if pred == 1:
-        st.success(f"{applicant_name} : APPROVED (Probability: {prob:.2%})")
-    else:
-        st.error(f"{applicant_name} : DENIED (Probability: {prob:.2%})")
+      if pred == 1:
+          st.success(f"{applicant_name} : APPROVED (Probability: {prob:.2%})")
+      else:
+          st.error(f"{applicant_name} : DENIED (Probability: {prob:.2%})")
