@@ -89,10 +89,16 @@ except Exception as e:
 
 st.sidebar.success(f"Loaded {len(df) :,} rows of data")
 
-clf = None
-metrics = None
-feature_order = None
+if "model" not in st.session_state:
+  st.session_state.model = None
+if "metrics" not in st.session_state:
+  st.session_state.model = None
+if "feature_order" not in st.session_state:
+  st.session_state.feature_order = None
 
+clf = st.session_state.model
+metrics = st.session_state.metrics
+feature_order = st.session_state.feature_order
 
 
 st. sidebar.header("II. Train Model")
@@ -100,10 +106,10 @@ train_now = st.sidebar.button("Train Model")
 
 if train_now:
     with st.spinner("Training model..."):
-        clf, metrics, feature_order = train_model(df)
-        st.session_state["model"] = clf
-        st.session_state["metrics"] = metrics
-        st.session_state["feature_order"] = feature_order
+      st.session_state.model, st.session_state.metrics, st.session_state.feature_order = train_model(df)
+      clf = st.session_state.model
+      metrics = st.session_state.metrics
+      feature_order = st.session_state.feature_order
 colA, colB = st.columns([1,1])
 
 with colA:
